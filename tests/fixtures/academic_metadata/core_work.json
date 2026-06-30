@@ -1,0 +1,16 @@
+{
+  "results": [
+    {
+      "id": "core-123",
+      "doi": "10.1234/core-open",
+      "title": "CORE Open Metadata Paper",
+      "abstract": "CORE provides open repository metadata and download URLs.",
+      "authors": [
+        {"name": "Cora Repository"}
+      ],
+      "downloadUrl": "https://core.ac.uk/download/pdf/123.pdf",
+      "sourceFulltextUrls": ["https://repository.example.org/core-open"],
+      "fullText": "THIS FULL TEXT MUST NOT BE STORED BY THE METADATA HARVESTER"
+    }
+  ]
+}

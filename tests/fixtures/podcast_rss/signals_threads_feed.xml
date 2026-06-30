@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss
+  version="2.0"
+  xmlns:podcast="https://podcastindex.org/namespace/1.0"
+>
+  <channel>
+    <title>Signals and Threads</title>
+    <item>
+      <title>Expect Tests for Trading Infrastructure</title>
+      <link>https://signalsandthreads.com/example-expect-tests</link>
+      <guid>signals-example-expect-tests</guid>
+      <pubDate>Mon, 01 Jun 2026 00:00:00 GMT</pubDate>
+      <podcast:transcript
+        url="https://signalsandthreads.com/example-expect-tests/transcript.txt"
+        type="text/plain"
+        language="en"
+      />
+      <enclosure
+        url="https://cdn.example.invalid/episode.mp3"
+        type="audio/mpeg"
+        length="12345"
+      />
+    </item>
+  </channel>
+</rss>

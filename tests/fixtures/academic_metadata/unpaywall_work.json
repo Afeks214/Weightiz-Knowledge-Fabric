@@ -1,0 +1,14 @@
+{
+  "doi": "10.1234/unpaywall-open",
+  "title": "Unpaywall Open Access Paper",
+  "abstract": "Unpaywall identifies open access locations and PDF links.",
+  "z_authors": [
+    {"given": "Uma", "family": "Open"}
+  ],
+  "is_oa": true,
+  "best_oa_location": {
+    "url": "https://example.org/unpaywall-open",
+    "url_for_pdf": "https://example.org/unpaywall-open.pdf",
+    "license": "cc-by"
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "dataset_id": "reuters_21578",
+  "dataset_title": "Reuters-21578",
+  "source_url": "https://archive.ics.uci.edu/dataset/137/reuters+21578+text+categorization+collection",
+  "license_status": "historical_research_dataset_metadata_only",
+  "records": [
+    {
+      "record_id": "reut2-000001",
+      "title": "Fixture record for commodity market categories",
+      "published_at": "1987-02-26",
+      "topics": ["earn", "grain"],
+      "places": ["usa"],
+      "split": "train"
+    }
+  ]
+}

@@ -1,0 +1,10 @@
+claim_extraction_v1:
+  required:
+    - document_id
+    - claim_text
+    - claim_type
+    - evidence_child_chunk_ids
+  abstain_field: abstain_reason
+weightiz_idea_hook_v1:
+  allowed_use: research_only
+  evidence_required: true

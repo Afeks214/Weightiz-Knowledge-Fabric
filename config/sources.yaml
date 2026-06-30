@@ -1,0 +1,80 @@
+podcasts:
+  - id: signals_threads
+    title: Signals and Threads
+    publisher: Jane Street
+    strategy: official_transcript_first
+    rights_policy: official_public_research_private
+    tags: [systems, ocaml, trading_infra, engineering]
+  - id: odds_on_open
+    title: Odds on Open
+    strategy: rss_or_platform_metadata_only_then_authorized_transcript
+    rights_policy: private_research_only
+    tags: [trading_research, investing_research, risk]
+  - id: cheeky_pint
+    title: Cheeky Pint
+    publisher: John Collison / Transistor
+    rss_url: https://feeds.transistor.fm/cheeky-pint-with-john-collison
+    strategy: official_transcript_first
+    rights_policy: official_public_research_private
+    tags: [technology, business, ai, podcast_transcript]
+
+academic_queries:
+  - id: qfin_market_microstructure
+    query: 'cat:q-fin.TR OR "market microstructure" OR "limit order book"'
+    sources: [arxiv, semantic_scholar, openalex, crossref, unpaywall, core]
+
+academic_apis:
+  - id: arxiv
+    title: arXiv
+    strategy: official_api_metadata_and_open_pdf
+    rights_policy: open_academic_metadata_api
+  - id: semantic_scholar
+    title: Semantic Scholar Academic Graph
+    strategy: official_api_metadata
+    rights_policy: open_academic_metadata_api
+  - id: openalex
+    title: OpenAlex
+    strategy: official_api_metadata_and_open_access_links
+    rights_policy: open_academic_metadata_api
+  - id: crossref
+    title: Crossref REST API
+    strategy: official_api_metadata
+    rights_policy: open_academic_metadata_api
+  - id: unpaywall
+    title: Unpaywall
+    strategy: official_api_open_access_discovery
+    rights_policy: open_academic_metadata_api
+  - id: core
+    title: CORE
+    strategy: official_api_open_access_discovery
+    rights_policy: open_academic_metadata_api
+
+repos:
+  - id: janestreet_ppx_expect
+    strategy: github_repo_docs_code_tests
+    tags: [testing, expect_tests, ocaml]
+  - id: man_arcticdb
+    strategy: github_repo_docs_code_tests
+    tags: [data_store, dataframe, time_series, python, cpp]
+  - id: quantlib
+    strategy: github_repo_docs_code_tests
+    tags: [cpp, quant_finance, derivatives, risk]
+  - id: qlib
+    strategy: github_repo_docs_code_tests
+    tags: [ai_quant, research_platform, python]
+  - id: lean
+    strategy: github_repo_docs_code_tests
+    tags: [backtesting_engine, research_platform]
+  - id: rcpp
+    strategy: github_repo_docs_code_tests
+    tags: [r, cpp, performance]
+
+news_datasets:
+  - id: reuters_21578
+    title: Reuters-21578
+    strategy: historical_dataset_metadata_and_local_records
+    rights_policy: private_research_only
+  - id: lseg_current_news
+    title: LSEG Reuters Machine Readable News
+    strategy: licensed_feed_only
+    rights_policy: metadata_only_unless_licensed

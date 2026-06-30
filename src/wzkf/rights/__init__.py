@@ -1,0 +1,1 @@
+"""Rights and license gates."""

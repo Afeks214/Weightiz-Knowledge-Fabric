@@ -1,0 +1,15 @@
+concepts:
+  - canonical_name: Limit Order Book
+    concept_type: market_microstructure
+    aliases:
+      - LOB
+      - order book
+      - Order Book
+      - Market Depth
+      - order book dynamics
+  - canonical_name: Expect Tests
+    concept_type: testing_method
+    aliases:
+      - expect-test
+      - ppx_expect
+      - snapshot expectations

@@ -1,0 +1,21 @@
+policies:
+  official_public_research_private:
+    full_text_allowed: true
+    raw_export_allowed: false
+    requires_license: false
+  private_research_only:
+    full_text_allowed: true
+    raw_export_allowed: false
+    requires_license: false
+  metadata_only_unless_licensed:
+    full_text_allowed: false
+    raw_export_allowed: false
+    requires_license: true
+  open_academic_metadata_api:
+    full_text_allowed: false
+    raw_export_allowed: false
+    requires_license: false
+  blocked_without_authorization:
+    full_text_allowed: false
+    raw_export_allowed: false
+    requires_license: true

@@ -1,0 +1,68 @@
+{
+  "api": {
+    "context_pack_hash": "c364146a0bf99cd57ceaa1080ac549f394486fe07a9d7ba59cdf46d278f7c075",
+    "context_status": 200,
+    "search_result_count": 10,
+    "search_status": 200
+  },
+  "context_pack_hash": "c364146a0bf99cd57ceaa1080ac549f394486fe07a9d7ba59cdf46d278f7c075",
+  "context_pack_path": "<acceptance-run-root>/cli-context-pack.json",
+  "cost_operations": 254,
+  "database": "wzkf_acceptance_1782845571",
+  "database_url": "postgresql+psycopg://wzkf:wzkf@localhost:5432/wzkf_acceptance_1782845571",
+  "db_counts": {
+    "child_chunks": 254,
+    "claims": 5,
+    "concept_aliases": 1,
+    "concepts": 1,
+    "context_packs": 1,
+    "costs": 5,
+    "documents": 5,
+    "embeddings": 254,
+    "jobs": 5,
+    "parent_chunks": 5,
+    "raw_artifacts": 5
+  },
+  "document_ids": [
+    "86fa09593a49e5795490f7a9",
+    "9ea62a8bc708cd67e194f300",
+    "01775005d41a5e031fbfbcf5",
+    "88d71d806cd25cad5adeb0a9",
+    "ab089dafa378f082caccadfa"
+  ],
+  "first_evidence_path": "<acceptance-run-root>/first-live-small-smoke.json",
+  "log_path": "<acceptance-run-root>/acceptance.log",
+  "obsidian_notes": [
+    "Concept - Limit Order Book.md",
+    "Is the Electronic Open Limit Order Book Inevitable.md",
+    "Limit Order Book Data.md",
+    "Stochastic Price Dynamics Implied By the Limit Order Book.md",
+    "What comes after smartphones with Snap CEO Evan Spiegel.md",
+    "janestreetppx_expect fixture repository.md"
+  ],
+  "retrieval_methods": {
+    "academic_metadata_api": 2,
+    "arxiv_atom": 1,
+    "github_clone": 1,
+    "podcast_rss_transcript": 1
+  },
+  "rq": {
+    "failed": 0,
+    "pending": 0,
+    "succeeded": 5,
+    "used": true,
+    "worked_first_run": true,
+    "worked_second_run": false
+  },
+  "run_root": "<acceptance-run-root>",
+  "second_evidence_path": "<acceptance-run-root>/second-live-small-smoke.json",
+  "source_urls": [
+    "https://share.transistor.fm/s/6b6fe1af",
+    "http://arxiv.org/abs/1105.4789v1",
+    "https://openalex.org/W2088503847",
+    "https://doi.org/10.1017/cbo9781316683040.014",
+    "https://github.com/janestreet/ppx_expect"
+  ],
+  "status": "PASS",
+  "storage_root": "<acceptance-run-root>/live-small-storage"
+}

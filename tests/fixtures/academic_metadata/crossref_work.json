@@ -1,0 +1,16 @@
+{
+  "message": {
+    "items": [
+      {
+        "DOI": "10.1234/crossref-metadata",
+        "title": ["Crossref Metadata Only Paper"],
+        "abstract": "<jats:p>Metadata records can cite a DOI without full text rights.</jats:p>",
+        "author": [
+          {"given": "Casey", "family": "Metadata"}
+        ],
+        "URL": "https://doi.org/10.1234/crossref-metadata",
+        "license": []
+      }
+    ]
+  }
+}

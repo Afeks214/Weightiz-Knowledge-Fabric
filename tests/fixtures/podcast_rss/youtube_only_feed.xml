@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0">
+  <channel>
+    <title>Unauthorized Video Feed</title>
+    <item>
+      <title>YouTube Only Episode</title>
+      <link>https://www.youtube.com/watch?v=abc123</link>
+      <guid>youtube-only</guid>
+    </item>
+  </channel>
+</rss>

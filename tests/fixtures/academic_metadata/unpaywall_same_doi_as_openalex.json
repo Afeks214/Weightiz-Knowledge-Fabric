@@ -1,0 +1,14 @@
+{
+  "doi": "10.1234/openalex-lob",
+  "title": "OpenAlex Limit Order Book Paper",
+  "abstract": "Unpaywall confirms an open access copy for the same limit order book paper.",
+  "z_authors": [
+    {"given": "Ada", "family": "Quant"}
+  ],
+  "is_oa": true,
+  "best_oa_location": {
+    "url": "https://repository.example.org/openalex-lob",
+    "url_for_pdf": "https://repository.example.org/openalex-lob.pdf",
+    "license": "cc-by"
+  }
+}

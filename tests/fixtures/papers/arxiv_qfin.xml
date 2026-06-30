@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <entry>
+    <id>http://arxiv.org/abs/2606.30001v1</id>
+    <title>A Limit Order Book Fixture for Market Microstructure</title>
+    <summary>
+      We study a deterministic fixture for limit order book research. The
+      method preserves citations, sections, caveats, and implementation notes.
+    </summary>
+    <author><name>Example Researcher</name></author>
+    <published>2026-06-01T00:00:00Z</published>
+    <category term="q-fin.TR" />
+  </entry>
+</feed>

@@ -1,0 +1,241 @@
+WZKF live MVP acceptance run
+run_root=<acceptance-run-root>
+database=wzkf_acceptance_1782845571
+storage_root=<acceptance-run-root>/live-small-storage
+redis_url=redis://localhost:6379/0
+queue_name=wzkf-acceptance-1782845571
+
+COMMAND: <wzkf-root>/.venv/bin/uv run pytest
+============================= test session starts ==============================
+platform darwin -- Python 3.12.13, pytest-9.1.1, pluggy-1.6.0
+rootdir: <wzkf-root>
+configfile: pyproject.toml
+testpaths: tests
+plugins: anyio-4.14.1
+collected 88 items
+
+tests/test_academic_metadata.py ...                                      [  3%]
+tests/test_academic_metadata_clients.py ...                              [  6%]
+tests/test_alembic_config.py ..                                          [  9%]
+tests/test_api.py .....                                                  [ 14%]
+tests/test_claims.py ..                                                  [ 17%]
+tests/test_cli_help.py ..............                                    [ 32%]
+tests/test_concept_alias_resolution.py ..                                [ 35%]
+tests/test_context_pack.py ...                                           [ 38%]
+tests/test_cost_cache.py .                                               [ 39%]
+tests/test_db_repository.py ....                                         [ 44%]
+tests/test_db_schema.py ...                                              [ 47%]
+tests/test_fixture_ingestion.py .                                        [ 48%]
+tests/test_fixture_paper_repo_ingestion.py .......                       [ 56%]
+tests/test_harvesters.py ....                                            [ 61%]
+tests/test_hashing_storage.py ...                                        [ 64%]
+tests/test_jobs_and_services.py ....                                     [ 69%]
+tests/test_live_small_smoke.py ..                                        [ 71%]
+tests/test_local_pipeline.py ..                                          [ 73%]
+tests/test_obsidian_export.py ..                                         [ 76%]
+tests/test_ontology_store.py ..                                          [ 78%]
+tests/test_openai_embedding_provider.py ...                              [ 81%]
+tests/test_parent_child_chunking.py ..                                   [ 84%]
+tests/test_postgres_retrieval_sql.py .                                   [ 85%]
+tests/test_rights_gate.py ...                                            [ 88%]
+tests/test_rq_worker.py ....                                             [ 93%]
+tests/test_search_pipeline.py ..                                         [ 95%]
+tests/test_source_registry.py ..                                         [ 97%]
+tests/test_structured_extraction.py ..                                   [100%]
+
+=============================== warnings summary ===============================
+.venv/lib/python3.12/site-packages/fastapi/testclient.py:1
+  <wzkf-root>/.venv/lib/python3.12/site-packages/fastapi/testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+======================== 88 passed, 1 warning in 2.89s =========================
+
+COMMAND: <wzkf-root>/.venv/bin/uv run wzkf sources validate
+<wzkf-root>/.venv/lib/python3.12/site-packages/fastapi/testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+  from starlette.testclient import TestClient as TestClient  # noqa
+sources.yaml valid: 17 sources
+
+COMMAND: docker compose up -d
+ Container wz-knowledge-fabric-redis-1 Running
+ Container wz-knowledge-fabric-postgres-1 Running
+
+COMMAND: docker compose ps
+NAME                             IMAGE                    COMMAND                  SERVICE    CREATED       STATUS         PORTS
+wz-knowledge-fabric-postgres-1   pgvector/pgvector:pg16   "docker-entrypoint.s..."   postgres   5 hours ago   Up 3 minutes   0.0.0.0:5432->5432/tcp, [::]:5432->5432/tcp
+wz-knowledge-fabric-redis-1      redis:7-alpine           "docker-entrypoint.s..."   redis      5 hours ago   Up 3 minutes   0.0.0.0:6379->6379/tcp, [::]:6379->6379/tcp
+
+COMMAND: <wzkf-root>/.venv/bin/uv run python - <<'PY'  # wait for Postgres/Redis
+postgres_select_1=1
+redis_ping=true
+
+COMMAND: <wzkf-root>/.venv/bin/uv run python - <<'PY'  # create isolated database
+created_database=wzkf_acceptance_1782845571
+
+COMMAND: DATABASE_URL=postgresql+psycopg://wzkf:wzkf@localhost:5432/wzkf_acceptance_1782845571 <wzkf-root>/.venv/bin/uv run alembic upgrade head
+INFO  [alembic.runtime.migration] Context impl PostgresqlImpl.
+INFO  [alembic.runtime.migration] Will assume transactional DDL.
+INFO  [alembic.runtime.migration] Running upgrade  -> 0001_initial, initial schema
+INFO  [alembic.runtime.migration] Running upgrade 0001_initial -> 0002_live_mvp_schema, live MVP schema compatibility
+<wzkf-root>/src/wzkf/db/migrations/versions/0002_live_mvp_schema.py:30: SAWarning: Did not recognize type 'vector' of column 'embedding_vector'
+  columns = {column["name"] for column in inspect(bind).get_columns("embeddings")}
+
+COMMAND: <wzkf-root>/.venv/bin/uv run python - <<'PY'  # verify migrated schema
+tables=alembic_version,child_chunks,claims,concept_aliases,concepts,context_packs,costs,document_concepts,documents,embeddings,jobs,parent_chunks,raw_artifacts,relations,sources
+expected_missing=none
+extensions=plpgsql,vector
+alembic_version=0002_live_mvp_schema
+
+COMMAND: <wzkf-root>/.venv/bin/uv run wzkf smoke live-small --database-url postgresql+psycopg://wzkf:wzkf@localhost:5432/wzkf_acceptance_1782845571 --storage-root <acceptance-run-root>/live-small-storage --use-rq --redis-url redis://localhost:6379/0 --queue-name wzkf-acceptance-1782845571
+<wzkf-root>/.venv/lib/python3.12/site-packages/fastapi/testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+  from starlette.testclient import TestClient as TestClient  # noqa
+21:53:06 Worker af0c2e8e125a434fa43b81fdab1532eb: started with PID 51262, version 2.10.0
+21:53:06 Worker af0c2e8e125a434fa43b81fdab1532eb: subscribing to channel rq:pubsub:af0c2e8e125a434fa43b81fdab1532eb
+21:53:06 *** Listening on wzkf-acceptance-1782845571...
+21:53:06 Worker af0c2e8e125a434fa43b81fdab1532eb: cleaning registries for queue: wzkf-acceptance-1782845571
+21:53:06 wzkf-acceptance-1782845571: wzkf.jobs.rq_worker.run_embedding_job('<acceptance-run-root>/live-small-storage', '07b296d5c6404b1a68bffe08cf78198b', 'mock', 'mock-hash-embedding-v1') (wzkf-embed-07b296d5c6404b1a68bffe08cf78198b)
+21:53:08 Successfully completed wzkf.jobs.rq_worker.run_embedding_job('<acceptance-run-root>/live-small-storage', '07b296d5c6404b1a68bffe08cf78198b', 'mock', 'mock-hash-embedding-v1') job in 0:00:01.851974s on worker af0c2e8e125a434fa43b81fdab1532eb
+21:53:08 wzkf-acceptance-1782845571: Job OK (wzkf-embed-07b296d5c6404b1a68bffe08cf78198b)
+21:53:08 Result is kept for 86400 seconds
+21:53:08 wzkf-acceptance-1782845571: wzkf.jobs.rq_worker.run_embedding_job('<acceptance-run-root>/live-small-storage', 'ecb4eae47bd21aa8d1d6ca7208efcb6f', 'mock', 'mock-hash-embedding-v1') (wzkf-embed-ecb4eae47bd21aa8d1d6ca7208efcb6f)
+21:53:08 Successfully completed wzkf.jobs.rq_worker.run_embedding_job('<acceptance-run-root>/live-small-storage', 'ecb4eae47bd21aa8d1d6ca7208efcb6f', 'mock', 'mock-hash-embedding-v1') job in 0:00:00.038671s on worker af0c2e8e125a434fa43b81fdab1532eb
+21:53:08 wzkf-acceptance-1782845571: Job OK (wzkf-embed-ecb4eae47bd21aa8d1d6ca7208efcb6f)
+21:53:08 Result is kept for 86400 seconds
+21:53:08 wzkf-acceptance-1782845571: wzkf.jobs.rq_worker.run_embedding_job('<acceptance-run-root>/live-small-storage', '746498770bc1b66a2b241ec046894e67', 'mock', 'mock-hash-embedding-v1') (wzkf-embed-746498770bc1b66a2b241ec046894e67)
+21:53:08 Successfully completed wzkf.jobs.rq_worker.run_embedding_job('<acceptance-run-root>/live-small-storage', '746498770bc1b66a2b241ec046894e67', 'mock', 'mock-hash-embedding-v1') job in 0:00:00.045247s on worker af0c2e8e125a434fa43b81fdab1532eb
+21:53:08 wzkf-acceptance-1782845571: Job OK (wzkf-embed-746498770bc1b66a2b241ec046894e67)
+21:53:08 Result is kept for 86400 seconds
+21:53:08 wzkf-acceptance-1782845571: wzkf.jobs.rq_worker.run_embedding_job('<acceptance-run-root>/live-small-storage', '36c7be96edae0b82837cf07f82e050de', 'mock', 'mock-hash-embedding-v1') (wzkf-embed-36c7be96edae0b82837cf07f82e050de)
+21:53:08 Successfully completed wzkf.jobs.rq_worker.run_embedding_job('<acceptance-run-root>/live-small-storage', '36c7be96edae0b82837cf07f82e050de', 'mock', 'mock-hash-embedding-v1') job in 0:00:00.030325s on worker af0c2e8e125a434fa43b81fdab1532eb
+21:53:08 wzkf-acceptance-1782845571: Job OK (wzkf-embed-36c7be96edae0b82837cf07f82e050de)
+21:53:08 Result is kept for 86400 seconds
+21:53:08 wzkf-acceptance-1782845571: wzkf.jobs.rq_worker.run_embedding_job('<acceptance-run-root>/live-small-storage', '8f9b1543a88b465bbff9ac8dbc8d75ac', 'mock', 'mock-hash-embedding-v1') (wzkf-embed-8f9b1543a88b465bbff9ac8dbc8d75ac)
+21:53:10 Successfully completed wzkf.jobs.rq_worker.run_embedding_job('<acceptance-run-root>/live-small-storage', '8f9b1543a88b465bbff9ac8dbc8d75ac', 'mock', 'mock-hash-embedding-v1') job in 0:00:01.614798s on worker af0c2e8e125a434fa43b81fdab1532eb
+21:53:10 wzkf-acceptance-1782845571: Job OK (wzkf-embed-8f9b1543a88b465bbff9ac8dbc8d75ac)
+21:53:10 Result is kept for 86400 seconds
+21:53:10 Worker af0c2e8e125a434fa43b81fdab1532eb: finished executing 5 jobs, quitting
+21:53:10 Worker af0c2e8e125a434fa43b81fdab1532eb: unsubscribing from channel rq:pubsub:af0c2e8e125a434fa43b81fdab1532eb
+live-small status=PASS
+evidence_path=<acceptance-run-root>/live-small-storage/evidence/live-small-smoke.json
+counts documents=5 raw_artifacts=5 child_chunks=254 embeddings=254 concepts=1 claims=5 context_packs=1
+api_search_status=200 api_search_result_count=10 api_context_status=200
+context_pack_hash=c364146a0bf99cd57ceaa1080ac549f394486fe07a9d7ba59cdf46d278f7c075 obsidian_notes=6 cost_operations=254
+rq worked=true succeeded=5 failed=0 pending=0
+
+COMMAND: <wzkf-root>/.venv/bin/uv run wzkf smoke live-small --database-url postgresql+psycopg://wzkf:wzkf@localhost:5432/wzkf_acceptance_1782845571 --storage-root <acceptance-run-root>/live-small-storage --use-rq --redis-url redis://localhost:6379/0 --queue-name wzkf-acceptance-1782845571
+<wzkf-root>/.venv/lib/python3.12/site-packages/fastapi/testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+  from starlette.testclient import TestClient as TestClient  # noqa
+21:53:15 Worker 4a1a22a47fa44de9a19856f1d22de256: started with PID 51299, version 2.10.0
+21:53:15 Worker 4a1a22a47fa44de9a19856f1d22de256: subscribing to channel rq:pubsub:4a1a22a47fa44de9a19856f1d22de256
+21:53:15 *** Listening on wzkf-acceptance-1782845571...
+21:53:15 Worker 4a1a22a47fa44de9a19856f1d22de256: cleaning registries for queue: wzkf-acceptance-1782845571
+21:53:15 Worker 4a1a22a47fa44de9a19856f1d22de256: done, quitting
+21:53:15 Worker 4a1a22a47fa44de9a19856f1d22de256: unsubscribing from channel rq:pubsub:4a1a22a47fa44de9a19856f1d22de256
+live-small status=PASS
+evidence_path=<acceptance-run-root>/live-small-storage/evidence/live-small-smoke.json
+counts documents=5 raw_artifacts=5 child_chunks=254 embeddings=254 concepts=1 claims=5 context_packs=1
+api_search_status=200 api_search_result_count=10 api_context_status=200
+context_pack_hash=c364146a0bf99cd57ceaa1080ac549f394486fe07a9d7ba59cdf46d278f7c075 obsidian_notes=6 cost_operations=254
+rq worked=false succeeded=5 failed=0 pending=0
+
+COMMAND: <wzkf-root>/.venv/bin/uv run wzkf search limit order book market depth --database-url postgresql+psycopg://wzkf:wzkf@localhost:5432/wzkf_acceptance_1782845571 --embedding-model mock-hash-embedding-v1 --limit 3
+<wzkf-root>/.venv/lib/python3.12/site-packages/fastapi/testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+  from starlette.testclient import TestClient as TestClient  # noqa
+5.21	01775005d41a5e031fbfbcf5	e44946b8ce03e1b66cc11173	https://openalex.org/W2088503847
+4.81	01775005d41a5e031fbfbcf5	1954f67b29ed1bbd168be898	https://openalex.org/W2088503847
+4.81	86fa09593a49e5795490f7a9	7cd70d4ff5c5b63b9a618200	https://share.transistor.fm/s/6b6fe1af
+
+COMMAND: <wzkf-root>/.venv/bin/uv run wzkf context-pack ... > <acceptance-run-root>/cli-context-pack.json
+
+COMMAND: <wzkf-root>/.venv/bin/uv run python - <<'PY'  # summarize CLI context pack
+cli_context_abstain=false
+cli_context_pack_hash=ee9271964e95d01ecdf217541873e2aeefe08a378e57ef3189e8c91c8e920231
+cli_context_child_count=10
+cli_context_citation_1=doc:01775005d41a5e031fbfbcf5 child:e44946b8ce03e1b66cc11173 source:https://openalex.org/W2088503847 hash:03313c917f6c3e947f7528477b0b630c924dfc8a81996b0cc120b105c36f24ea
+cli_context_citation_2=doc:01775005d41a5e031fbfbcf5 child:1954f67b29ed1bbd168be898 source:https://openalex.org/W2088503847 hash:0b0f0784a88e465ba264d3bc7ed41b9588fc92683b94c106fb71b5ded095ed33
+cli_context_citation_3=doc:86fa09593a49e5795490f7a9 child:7cd70d4ff5c5b63b9a618200 source:https://share.transistor.fm/s/6b6fe1af hash:9247aac6b1fcfb12fa00475e3f9fe538aae1681497df494cb0e0f9f2d10710b5
+
+COMMAND: <wzkf-root>/.venv/bin/uv run python - <<'PY'  # final acceptance assertions
+acceptance_status=PASS
+summary_path=<acceptance-run-root>/acceptance-summary.json
+log_path=<acceptance-run-root>/acceptance.log
+db_counts={"child_chunks": 254, "claims": 5, "concept_aliases": 1, "concepts": 1, "context_packs": 1, "costs": 5, "documents": 5, "embeddings": 254, "jobs": 5, "parent_chunks": 5, "raw_artifacts": 5}
+retrieval_methods={"academic_metadata_api": 2, "arxiv_atom": 1, "github_clone": 1, "podcast_rss_transcript": 1}
+source_urls=https://share.transistor.fm/s/6b6fe1af | http://arxiv.org/abs/1105.4789v1 | https://openalex.org/W2088503847 | https://doi.org/10.1017/cbo9781316683040.014 | https://github.com/janestreet/ppx_expect
+context_pack_hash=c364146a0bf99cd57ceaa1080ac549f394486fe07a9d7ba59cdf46d278f7c075
+cost_operations=254
+rq_used=true
+rq_succeeded=5
+rq_failed=0
+rq_pending=0
+obsidian_notes=6
+
+ACCEPTANCE SUMMARY
+{
+  "api": {
+    "context_pack_hash": "c364146a0bf99cd57ceaa1080ac549f394486fe07a9d7ba59cdf46d278f7c075",
+    "context_status": 200,
+    "search_result_count": 10,
+    "search_status": 200
+  },
+  "context_pack_hash": "c364146a0bf99cd57ceaa1080ac549f394486fe07a9d7ba59cdf46d278f7c075",
+  "context_pack_path": "<acceptance-run-root>/cli-context-pack.json",
+  "cost_operations": 254,
+  "database": "wzkf_acceptance_1782845571",
+  "database_url": "postgresql+psycopg://wzkf:wzkf@localhost:5432/wzkf_acceptance_1782845571",
+  "db_counts": {
+    "child_chunks": 254,
+    "claims": 5,
+    "concept_aliases": 1,
+    "concepts": 1,
+    "context_packs": 1,
+    "costs": 5,
+    "documents": 5,
+    "embeddings": 254,
+    "jobs": 5,
+    "parent_chunks": 5,
+    "raw_artifacts": 5
+  },
+  "document_ids": [
+    "86fa09593a49e5795490f7a9",
+    "9ea62a8bc708cd67e194f300",
+    "01775005d41a5e031fbfbcf5",
+    "88d71d806cd25cad5adeb0a9",
+    "ab089dafa378f082caccadfa"
+  ],
+  "first_evidence_path": "<acceptance-run-root>/first-live-small-smoke.json",
+  "log_path": "<acceptance-run-root>/acceptance.log",
+  "obsidian_notes": [
+    "Concept - Limit Order Book.md",
+    "Is the Electronic Open Limit Order Book Inevitable.md",
+    "Limit Order Book Data.md",
+    "Stochastic Price Dynamics Implied By the Limit Order Book.md",
+    "What comes after smartphones with Snap CEO Evan Spiegel.md",
+    "janestreetppx_expect fixture repository.md"
+  ],
+  "retrieval_methods": {
+    "academic_metadata_api": 2,
+    "arxiv_atom": 1,
+    "github_clone": 1,
+    "podcast_rss_transcript": 1
+  },
+  "rq": {
+    "failed": 0,
+    "pending": 0,
+    "succeeded": 5,
+    "used": true,
+    "worked_first_run": true,
+    "worked_second_run": false
+  },
+  "run_root": "<acceptance-run-root>",
+  "second_evidence_path": "<acceptance-run-root>/second-live-small-smoke.json",
+  "source_urls": [
+    "https://share.transistor.fm/s/6b6fe1af",
+    "http://arxiv.org/abs/1105.4789v1",
+    "https://openalex.org/W2088503847",
+    "https://doi.org/10.1017/cbo9781316683040.014",
+    "https://github.com/janestreet/ppx_expect"
+  ],
+  "status": "PASS",
+  "storage_root": "<acceptance-run-root>/live-small-storage"
+}

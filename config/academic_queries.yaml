@@ -1,0 +1,7 @@
+queries:
+  - id: qfin_market_microstructure
+    query: 'cat:q-fin.TR OR "market microstructure" OR "limit order book"'
+    sources: [arxiv, semantic_scholar, openalex, crossref]
+  - id: neuro_symbolic
+    query: '"neuro-symbolic" OR "differentiable logic" OR "probabilistic logic programming"'
+    sources: [arxiv, semantic_scholar, openalex]
