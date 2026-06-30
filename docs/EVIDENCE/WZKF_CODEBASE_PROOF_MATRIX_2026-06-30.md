@@ -2,6 +2,8 @@
 
 ## Executive Verdict
 
+**Seal objective traced:** `WZKF-REPO-SEAL-AND-INSTITUTIONAL-DD-001`.
+
 **Claim status:** `LIVE LOCAL MVP PROVEN`.
 
 This does **not** mean production-scale deployment is proven. It means the

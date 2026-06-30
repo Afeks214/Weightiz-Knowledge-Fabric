@@ -54,7 +54,9 @@ verification from what remains partial or not proven.
 
 ## NEXT PHASE
 
-1. Add CI for tests, source validation, and syntax checks.
+1. Keep GitHub Actions CI green for tests and source validation; decide whether
+   the Docker acceptance job should remain manual or become a required runner
+   gate.
 2. Add CodeQL and dependency/security scanning.
 3. Add OpenLineage-style run manifests for ingestion and processing runs.
 4. Add Pydantic schemas for source, rights, academic query, and extraction

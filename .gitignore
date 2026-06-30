@@ -1,7 +1,13 @@
 .venv/
 .pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.cache/
+.tox/
 __pycache__/
 *.pyc
+.coverage
+htmlcov/
 .DS_Store
 *.log
 .env
@@ -13,6 +19,9 @@ data/obsidian_export/
 data/manifests/runtime/
 data/postgres/
 data/redis/
+docker/volumes/
+volumes/
+postgres_data/
 /tmp/
 dist/
 build/
