@@ -1,0 +1,22 @@
+name: ctr-rust-ci-smoke
+
+on:
+  push:
+    branches: [ctr-v3-build-validation]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ctr-ci-smoke
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@1.85.0
+      - run: cargo check --all-targets
+      - run: cargo test --all-targets
+      - run: cargo run --quiet
