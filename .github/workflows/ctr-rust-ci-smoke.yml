@@ -3,6 +3,8 @@ name: ctr-rust-ci-smoke
 on:
   push:
     branches: [ctr-v3-build-validation]
+  pull_request:
+    branches: [main]
   workflow_dispatch:
 
 permissions:
